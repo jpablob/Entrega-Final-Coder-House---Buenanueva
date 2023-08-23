@@ -1,0 +1,38 @@
+{% extends "padre.html" %}
+
+{%  load static %}
+
+{% block seccion %}
+    <h1>Cursos</h1>    
+{% endblock %}
+
+{% block contenido %}
+  
+    <div class="container"> 
+        <table class="table table-hover" style="text-align: center; margin-top: 100px;margin-bottom: 100px;">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">comision</th>           
+            </tr>
+            </thead>
+            <tbody>
+                {% for n in cursos %}
+                <tr>
+                    <th>{{n.id}}</th>
+                    <td>{{n.nombre}}</td>
+                    <td>{{n.comision}}</td>            
+                    <td><a href="{% url 'eliminar_curso'  n.id %}" class="btn btn-danger">BORRAR</a></td>
+                    <td><a href="{% url 'editar_curso'  n.id %}" class="btn btn-warning">EDITAR</a></td>
+                </tr>
+                {% endfor %}        
+            
+            </tbody>
+        </table>
+        <button>
+            <a href="alta_curso" class="btn btn-primary">Agregar otro curso</a>
+        </button>
+
+    </div>
+{% endblock %}

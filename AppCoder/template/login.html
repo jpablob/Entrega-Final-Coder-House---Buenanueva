@@ -1,0 +1,17 @@
+{% extends  "padre.html" %}
+
+{% block seccion %}
+    <h1>Login</h1>
+{% endblock %}
+
+{% block contenido %}
+
+    <h2> Ingrese los datos </h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <button> Iniciar </button>
+    </form>
+
+{% endblock %}
