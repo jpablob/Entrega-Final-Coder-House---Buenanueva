@@ -89,14 +89,14 @@ def login_request(request):
         form = AuthenticationForm(request , data=request.POST)
 
         if form.is_valid(): 
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
 
             user = authenticate(username=username , password=password)
 
             if user is not None:
                 login(request , user)
-                return render(request, "inicio.html", {"mensaje":f"Bienvenido {username}"})
+                return render(request, "inicio.html", {"mensaje":f"Bienvenido/a: {username}"})
             else:
                 return HttpResponse(f"Usuario Incorrecto")
         else:
