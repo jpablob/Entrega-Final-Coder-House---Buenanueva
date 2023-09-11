@@ -1,22 +1,33 @@
 from django.shortcuts import render
-from AppCoder.models import Curso
+from AppCoder.models import Curso, Avatar
 from django.template import loader
 from django.http import HttpResponse
-from AppCoder.forms import Curso_form
+from AppCoder.forms import Curso_form, UserEditForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, authenticate
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def inicio(request):
-    return render( request , "padre.html")
+    print(request.user.id)
+    if request.user.id != None:
+        avatares = Avatar.objects.filter(user=request.user.id)
+        return render( request , "padre.html", {"url":avatares[0].imagen.url})
+    else:
+        return render( request , "padre.html")
 
 def cursos(request):
-    cursos = Curso.objects.all()
-    dicc = {"cursos":cursos}
-    plantillas = loader.get_template("cursos.html")
-    documento = plantillas.render(dicc)
-    return HttpResponse(documento)
+    print(request.user.id)
+    if request.user.id != None:
+        avatares = Avatar.objects.filter(user=request.user.id)
+        cursos = Curso.objects.all()
+        return render(request, "cursos.html", {"cursos":cursos,"url":avatares[0].imagen.url})
+    else:
+        return render(request, "cursos.html")
+    # dicc = {"cursos":cursos}
+    # plantillas = loader.get_template("cursos.html")
+    # documento = plantillas.render(dicc)
+    # return HttpResponse(documento)
 
 def alta_curso(request, nombre , comision):
     curso = Curso(nombre=nombre , comision=comision)
@@ -24,11 +35,19 @@ def alta_curso(request, nombre , comision):
     texto = f"Se guardo en el BD el Curso: {curso.nombre} Comision:{curso.comision}"
     return HttpResponse(texto)
 
+@login_required
 def profesores(request):
-    return render( request , "profesores.html")
+    avatares = Avatar.objects.filter(user=request.user.id)
+    return render(request, "profesores.html", {"url":avatares[0].imagen.url})
 
 def alumnos(request):
-    return render( request , "alumnos.html")
+    print(request.user.id)
+    if request.user.id != None:
+        avatares = Avatar.objects.filter(user=request.user.id)
+        return render( request , "alumnos.html", {"url":avatares[0].imagen.url})
+    else:
+        return render( request , "alumnos.html")
+
 
 def curso_formulario(request):
 
@@ -96,7 +115,8 @@ def login_request(request):
 
             if user is not None:
                 login(request , user)
-                return render(request, "inicio.html", {"mensaje":f"Bienvenido/a: {username}"})
+                avatares = Avatar.objects.filter(user=request.user.id)
+                return render(request, "inicio.html", {"mensaje":f"Bienvenido/a: {username}", "url":avatares[0].imagen.url})
             else:
                 return HttpResponse(f"Usuario Incorrecto")
         else:
@@ -125,3 +145,24 @@ def register(request):
         return render(request, "register.html", {"form":form})
 
 
+@login_required
+def editarPerfil(request):
+    usuario = request.user
+    if request.method == "POST":
+        miFormulario = UserEditForm(request.POST)
+
+        if miFormulario.is_valid():
+            informacion = miFormulario.cleaned_data
+            usuario.email = informacion['email']
+            password1 = informacion['password1']
+            usuario.set_password(password1)
+            usuario.save()
+
+            return render(request, "inicio.html")
+
+    
+
+    else:
+        miFormulario = UserEditForm(initial={'email':usuario.email})
+
+    return render(request, "editar_perfil.html", {"miFormulario":miFormulario, "usuario":usuario})
