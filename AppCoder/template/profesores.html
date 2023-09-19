@@ -1,23 +1,39 @@
 {% extends "padre.html" %}
 
+{% load static %}
 
 {% block seccion %}
     <h1>Profesores</h1>
 {% endblock %}
 
-
-
 {% block contenido %}
 
-<main>
-    <ul>
-        <li>PROFESOR 1</li>
-        <li>PROFESOR 2</li>
-        <li>PROFESOR 3</li>
-        <li>PROFESOR 4</li>
-        <li>PROFESOR 5</li>
-        <li>PROFESOR 6</li>     
-    </ul>
-</main>
+      <div class="container"> 
+        <table class="table table-hover" style="text-align: center; margin-top: 100px;margin-bottom: 100px;">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>nombre</th>
+                <th>apellido</th>           
+            </tr>
+            {% for n in profesores %}
+            <tr>
+                <th>{{n.id}}</th>
+                <td>{{n.nombre}}</td>
+                <td>{{n.apellido}}</td>
+                <td>
+                    {% if request.user.is_authenticated %}            
+                    <a href="{% url 'eliminar_profesor'  n.id %}" class="btn btn-danger">BORRAR</a>
+                    <a href="{% url 'editar_profesor'  n.id %}" class="btn btn-warning">EDITAR</a>
+                    {% endif %}
+                </td>
+            {% endfor %}
+            </tr>     
+        </table>
+        <button>
+            <a href="alta_profesor" class="btn btn-primary">Agregar otro profesor</a>
+        </button>
+
+      </div>
 
 {% endblock %}

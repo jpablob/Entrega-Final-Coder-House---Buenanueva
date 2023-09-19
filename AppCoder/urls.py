@@ -24,11 +24,11 @@ urlpatterns = [
     path("buscar2" , views.buscar2),
     path("eliminar_alumno/<int:id>", views.eliminar_alumno, name="eliminar_alumno"),
     path("editar_alumno/<int:id>" , views.editar_alumno , name="editar_alumno"),
-    path("editar_alumno" , views.editar_alumno ,name="editar_alumno")
+    path("editar_alumno" , views.editar_alumno ,name="editar_alumno"),
     #profesores
-    #path("alta_profesor",views.profesor_formulario),
-    # path("buscar_profesor" , views.buscar_profesor),
-    # path("eliminar_profesor/<int:id>", views.eliminar_profesor, name="eliminar_profesor"),
-    # path("editar_profesor/<int:id>" , views.editar , name="editar_profesor"),
-    # path("editar_profesor" , views.editar ,name="editar_profesor")
+    path("alta_profesor",views.profesor_formulario),
+    path("buscar_profesor" , views.buscar_profesor),
+    path("eliminar_profesor/<int:id>", views.eliminar_profesor, name="eliminar_profesor"),
+    path("editar_profesor/<int:id>" , views.editar_profesor , name="editar_profesor"),
+    path("editar_profesor" , views.editar_profesor ,name="editar_profesor")
 ]

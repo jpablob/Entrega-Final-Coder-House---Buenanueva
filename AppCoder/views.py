@@ -2,7 +2,7 @@ from django.shortcuts import render
 from AppCoder.models import Curso, Avatar, Profesores, Alumnos
 from django.template import loader
 from django.http import HttpResponse
-from AppCoder.forms import Curso_form, UserEditForm, Alumnos_form
+from AppCoder.forms import Curso_form, UserEditForm, Alumnos_form, Profesores_form
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -38,7 +38,13 @@ def alta_curso(request, nombre , comision):
 def alta_alumno(request, nombre , apellido):
     alumno = Alumnos(nombre=nombre , apellido=apellido)
     alumno.save()
-    texto = f"Se guardo en el BD el Curso: {alumno.nombre} Apellido:{alumno.apellido}"
+    texto = f"Se guardo en el BD el Alumno: {alumno.nombre} Apellido:{alumno.apellido}"
+    return HttpResponse(texto)
+
+def alta_profesor(request, nombre , apellido):
+    profesor = Profesores(nombre=nombre , apellido=apellido)
+    profesor.save()
+    texto = f"Se guardo en el BD el Profesor: {profesor.nombre} Apellido:{profesor.apellido}"
     return HttpResponse(texto)
 
 @login_required
@@ -47,7 +53,7 @@ def profesores(request):
     if request.user.id != None:
         avatares = Avatar.objects.filter(user=request.user.id)
         profesores = Profesores.objects.all()
-        return render(request, "profesores.html", {"url":avatares[0].imagen.url})
+        return render(request, "profesores.html", {"profesores":profesores,"url":avatares[0].imagen.url})
 
 def alumnos(request):
     print(request.user.id)
@@ -87,11 +93,28 @@ def alumno_formulario(request):
         
     return render( request , "formulario2.html")
 
+def profesor_formulario(request):
+
+    if request.method == "POST":
+
+        mi_formulario3 = Profesores_form( request.POST )
+
+        if mi_formulario3.is_valid():
+            datos3 = mi_formulario3.cleaned_data
+            profesor = Profesores( nombre=datos3['nombre'] , apellido=datos3['apellido'])
+            profesor.save()
+            return render( request , "formulario3.html") 
+        
+    return render( request , "formulario3.html")
+
 def buscar_curso(request):
     return render( request , "buscar_curso.html")
 
 def buscar_alumno(request):
     return render( request , "buscar_alumno.html")
+
+def buscar_profesor(request):
+    return render( request , "buscar_profesor.html")
 
 def buscar(request):
 
@@ -111,6 +134,15 @@ def buscar2(request):
     else:
         return HttpResponse("Campo vacio")
     
+def buscar3(request):
+
+    if request.GET['nombre']:
+        nombre = request.GET['nombre']
+        profesores = Profesores.objects.filter(nombre__icontains = nombre)
+        return render( request, "resultado_busqueda3.html", {"profesores": profesores})
+    else:
+        return HttpResponse("Campo vacio")
+    
 def eliminar_curso(request, id):
     curso = Curso.objects.get(id=id)
     curso.delete()
@@ -122,6 +154,12 @@ def eliminar_alumno(request, id):
     alumno.delete()
     alumno=Alumnos.objects.all()
     return render(request, "alumnos.html", {"alumnos": alumnos})
+
+def eliminar_profesor(request, id):
+    profesor = Profesores.objects.get(id=id)
+    profesor.delete()
+    profesor=Profesores.objects.all()
+    return render(request, "profesores.html", {"profesores": profesores})
 
 def editar( request , id):
 
@@ -164,6 +202,25 @@ def editar_alumno( request , id):
     
     return render( request , "editar_alumno.html" , {"mi_formulario2":mi_formulario2, "alumno": alumno})
 
+def editar_profesor( request , id):
+
+    profesor = Profesores.objects.get(id=id)
+
+    if request.method == "POST":
+
+        mi_formulario3 = Profesores_form( request.POST )
+        if mi_formulario3.is_valid():
+            datos3 = mi_formulario3.cleaned_data
+            profesor.nombre = datos3['nombre']
+            profesor.apellido = datos3['apellido']
+            profesor.save()
+
+            profesor = Profesores.objects.all()          
+            return render(request , "profesores.html" , {"profesores": profesores})
+    else:
+        mi_formulario3 = Profesores_form(initial={'nombre':profesor.nombre , "apellido":profesor.apellido})
+    
+    return render( request , "editar_profesor.html" , {"mi_formulario3":mi_formulario3, "profesor": profesor})
 
 
 def login_request(request):

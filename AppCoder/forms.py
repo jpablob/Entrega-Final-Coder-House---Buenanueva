@@ -19,3 +19,7 @@ class UserEditForm(UserCreationForm):
 class Alumnos_form(forms.Form):
     nombre = forms.CharField(max_length=40)
     apellido = forms.CharField(max_length=40)
+
+class Profesores_form(forms.Form):
+    nombre = forms.CharField(max_length=40)
+    apellido = forms.CharField(max_length=40)
