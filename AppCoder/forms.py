@@ -15,3 +15,7 @@ class UserEditForm(UserCreationForm):
         model = User
         fields = ['email', 'password1', 'password2']
         help_text = {k:"" for k in fields}
+
+class Alumnos_form(forms.Form):
+    nombre = forms.CharField(max_length=40)
+    apellido = forms.CharField(max_length=40)

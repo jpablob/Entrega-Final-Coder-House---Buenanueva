@@ -7,8 +7,7 @@ urlpatterns = [
     path("profesores" , views.profesores , name="profesores"),
     path("cursos" , views.cursos , name="cursos"),
     path("alumnos" , views.alumnos , name="alumnos" ),
-    #path("contacto" , views.contacto),
-    #path("alta_curso/<nombre>" , views.alta_curso),
+    #cursos
     path("alta_curso" , views.curso_formulario),
     path("buscar_curso" , views.buscar_curso),
     path("buscar" , views.buscar),
@@ -18,6 +17,18 @@ urlpatterns = [
     path("login",views.login_request,name="Login"),
     path("logout",LogoutView.as_view(template_name="logout.html"),name="Logout"),
     path("register",views.register,name="Register"),
-    path("editarPerfil",views.editarPerfil, name="EditarPerfil")
-  
+    path("editarPerfil",views.editarPerfil, name="EditarPerfil"),
+    #alumnos
+    path("alta_alumno", views.alumno_formulario),
+    path("buscar_alumno" , views.buscar_alumno),
+    path("buscar2" , views.buscar2),
+    path("eliminar_alumno/<int:id>", views.eliminar_alumno, name="eliminar_alumno"),
+    path("editar_alumno/<int:id>" , views.editar_alumno , name="editar_alumno"),
+    path("editar_alumno" , views.editar_alumno ,name="editar_alumno")
+    #profesores
+    #path("alta_profesor",views.profesor_formulario),
+    # path("buscar_profesor" , views.buscar_profesor),
+    # path("eliminar_profesor/<int:id>", views.eliminar_profesor, name="eliminar_profesor"),
+    # path("editar_profesor/<int:id>" , views.editar , name="editar_profesor"),
+    # path("editar_profesor" , views.editar ,name="editar_profesor")
 ]

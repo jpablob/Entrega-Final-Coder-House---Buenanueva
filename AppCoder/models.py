@@ -13,4 +13,11 @@ class Curso(models.Model):
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='avatares', null=True, blank=True)
-    
+
+class Profesores(models.Model):
+    nombre = models.CharField(max_length=40)
+    apellido = models.CharField(max_length=40)
+
+class Alumnos(models.Model):
+    nombre = models.CharField(max_length=40)
+    apellido = models.CharField(max_length=40)
